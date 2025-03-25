@@ -1,0 +1,8 @@
+azure-mgmt-hdinsight==9.0.0
+azure-mgmt-resource==23.3.0
+azure-identity==1.21.0
+azure-storage-blob==12.25.0
+pandas==2.2.3
+pyarrow==19.0.1
+python-dotenv-1.0.1
+yfinance==0.2.55
