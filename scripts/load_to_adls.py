@@ -10,7 +10,7 @@ def auth_datalake(acc_name: str, acc_key: str):
             account_url = f"https://{acc_name}.dfs.core.windows.net",
             credential = acc_key
         )
-        print('Authenticating with Azure Data Lake')
+        print('Authenticated with Azure Data Lake')
     
         return service_client
     
@@ -32,8 +32,8 @@ def upload_file_to_datalake(
     try:
         for df in dataframes:
             ticker = df["symbol"].iloc[0] # AAPL, AAPL, AAPL | based on the logic for pulling hourly stock data from yahoo finance
-            blob_path = f"raw/company_data/{ticker}_{current_time}.parquet"
-            parquet_buffer = df.to_parquet(index=False)
+            blob_path = f"raw/company_data/{ticker}_{current_time}.csv"
+            parquet_buffer = df.to_csv(index=False)
     
             # Upload to ADLS
             file_client = file_system_client.get_file_client(blob_path)
