@@ -8,9 +8,9 @@ async def main():
     start_time = perf_counter()
     print(f"Starting fetch at {start_time}")
     
-    ticker_df = pd.read_csv("data/companies.csv")
+    tickers_df = pd.read_csv("data/companies.csv")
     
-    results = await fetch_all_stocks(ticker_df)
+    results = await fetch_all_stocks(tickers_df)
     service_client = auth_datalake(acc_name=ACC_NAME, acc_key=ACC_KEY)
     upload_file_to_datalake(results, service_client, CONTAINER_NAME)
 
