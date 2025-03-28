@@ -1,5 +1,3 @@
-import sys
-import os
 from airflow.decorators import task, dag
 from airflow.hooks.base import BaseHook
 from airflow.operators.email import EmailOperator
@@ -9,9 +7,6 @@ from typing import List
 import pandas as pd
 from pytz import timezone
 
-# Add the 'scripts' directory to the Python path to enable imports from there
-
-sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 
 from scripts import fetch_all_stocks
 from scripts import auth_datalake, upload_file_to_datalake
