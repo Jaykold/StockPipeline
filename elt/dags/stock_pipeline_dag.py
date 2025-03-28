@@ -8,8 +8,7 @@ import pandas as pd
 from pytz import timezone
 
 
-from scripts import fetch_all_stocks
-from scripts import auth_datalake, upload_file_to_datalake
+from scripts import fetch_all_stocks, auth_datalake, upload_file_to_datalake
 
 dag_timezone = timezone("America/New_York")
 

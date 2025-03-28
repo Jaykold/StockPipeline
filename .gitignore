@@ -3,6 +3,9 @@ __pycache__/
 venv/
 *.env
 
+# UV cache
+.uv/
+
 # Airflow configuration
 airflow.cfg
 airflow_login
