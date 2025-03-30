@@ -25,7 +25,7 @@ default_args = {
 @dag(
     dag_id="ELT",
     default_args=default_args,
-    schedule_interval="0 18 * * *",
+    schedule_interval="0 18 * * 1-5",
     description=("Extract stock data from Yahoo Finance,"
     "load to Azure DataLake, Transform with PySpark and push to Azure SQL Server")
 )
