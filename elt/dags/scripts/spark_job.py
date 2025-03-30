@@ -2,7 +2,7 @@ import os
 import sys
 from pyspark.sql import SparkSession
 from pyspark.conf import SparkConf
-from pyspark.sql.functions import col, round
+from pyspark.sql.functions import col, round, sha2, concat_ws
 from pyspark.sql.types import StructType, StructField, StringType, DoubleType, LongType, TimestampType
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -37,18 +37,32 @@ try:
     df = spark.read.csv(file_path, header=True, schema=schema)
     df.printSchema()
     
-    df.select(
-        col('Datetime'),
-        round(col('Open'), 2).alias('Open'),
-        round(col('High'), 2).alias('High'),
-        round(col('Low'), 2).alias('Low'),
-        round(col('Close'), 2).alias('Close'),
-        col('Volume'),
-        round(col('Dividends'), 2).alias('Dividends'),
-        round(col('Stock Splits'), 2).alias('Stock Splits'),
-        col('symbol'),
-        col('name')
-    ).show(15)
+    df = df.withColumn(
+            "unique_id",
+            sha2(
+                concat_ws(
+                    "",
+                    col("Datetime"),
+                    col("symbol"),
+                    col("Open"),
+                    col("Close")),
+                256,    
+                )
+        )
+    
+    transformed_df = df.select(
+        col("unique_id"),
+        col("Datetime"),
+        col("symbol"),
+        col("name"),
+        round(col("Open"), 2).alias("Open"),
+        round(col("High"), 2).alias("High"),
+        round(col("Low"), 2).alias("Low"),
+        round(col("Close"), 2).alias("Close"),
+        col("Volume")
+    ).drop("Dividends", "Stock Splits")
+
+    transformed_df.show(15)
 
 except Exception as e:
     print(f"Error occured: {e}")
