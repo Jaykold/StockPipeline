@@ -4,7 +4,6 @@ The script is designed to work with Microsoft Edge WebDriver.
 It is important to ensure that the WebDriver version matches the installed version of Microsoft Edge.'''
 
 import os
-from dags.utils import EDGE_DRIVER_PATH
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.edge.service import Service
@@ -13,6 +12,11 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.edge.options import Options
 import csv
 import time
+
+from dotenv import load_dotenv
+
+load_dotenv()
+EDGE_DRIVER_PATH = os.getenv("EDGE_DRIVER_PATH")
 
 def fetch_company_data():    
     try:

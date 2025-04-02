@@ -7,7 +7,11 @@ from pyspark.sql.types import StructType, StructField, StringType, DoubleType, L
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from utils import ACC_NAME, SP_APP_ID, SP_SECRET_ID, SP_TENANT_ID, CONTAINER_NAME, ACC_KEY
+from utils import ACC_NAME, CONTAINER_NAME, ACC_KEY
+
+# ACC_NAME = os.getenv("ACC_NAME")
+# ACC_KEY = os.getenv("ACC_KEY")
+# CONTAINER_NAME = os.getenv("CONTAINER_NAME")
 
 schema = StructType([
     StructField("Datetime", TimestampType(), False),
