@@ -5,7 +5,6 @@ An end-to-end data engineering project that extracts stock data from Yahoo Finan
 ## Table of Contents
 
 - [Overview](#overview)
-- [Architecture](#architecture)
 - [Project Structure](#project-structure)
 - [Technologies Used](#technologies-used)
 - [Setup and Installation](#setup-and-installation)
@@ -17,6 +16,31 @@ An end-to-end data engineering project that extracts stock data from Yahoo Finan
 
 This project implements a complete ETL (Extract, Transform, Load) pipeline for stock market data. It extracts hourly stock data for major companies, processes it, and stores it in a structured format for analysis.
 
+## Preprequisite
+- Docker desktop, docker compose
+- Active azure subscription
+- Terraform installed
+ - [Download your OS version here](https://developer.hashicorp.com/terraform/install)
+- Create a terraform.tfvars for sensitive information
+
+```
+client_ip_address = <YOUR_IP_ADDRESS> # https://whatismyipaddress.com/
+sql_admin_username = <YOUR_MSSQL_USERNAME>
+sql_admin_password = <YOUR_MSSQL_PASSWORD>
+resource_group_location = <YOUR_LOCATION> # "East US", "UK West", "North Europe"
+```
+
+- Insert these with your details into your .env file for docker-compose
+```
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USER=your_actual_email@gmail.com
+SMTP_PASSWORD=your_actual_password
+SMTP_MAIL_FROM=your_actual_email@gmail.com
+SMTP_STARTTLS=True
+SMTP_SSL=False
+```
+
 ## Architecture
 
 ![Architecture Diagram](https://via.placeholder.com/800x400?text=Stock+Data+Pipeline+Architecture)
@@ -26,30 +50,6 @@ The pipeline follows this workflow:
 2. **Load** - Store raw data in Azure Data Lake Storage
 3. **Transform** - Process data using PySpark
 4. **Load** - Store transformed data in Azure SQL Server with appropriate partitioning
-
-## Project Structure
-```
-├── data/
-│ └── companies.csv track
-├── elt/
-│ ├── dags/
-│ │ ├── scripts/
-│ │ │ ├── extract_stock_data.py
-│ │ │ ├── load_to_adls.py Lake 
-│ │ │ ├── spark_job.py
-│ │ │ └── create_table.sql
-│ │ ├── utils/ 
-│ │ └── stock_pipeline_dag.py
-│ ├── fetch_company_data.py data 
-│ └── webserver_config.py
-├── logs/
-├── .gitignore
-├── LICENSE
-├── makefile
-├── pyproject.toml
-├── requirements.txt
-└── README.md
-```
 
 ## Technologies Used
 

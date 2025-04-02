@@ -1,8 +1,10 @@
 apache-airflow==2.10.5
+apache-airflow-providers-databricks==6.5.0
+apache-airflow-providers-microsoft-azure==12.2.2
 azure-identity==1.21.0
 azure-storage-blob==12.25.0
 azure-storage-file-datalake==12.19.0
-pandas==2.2.3
+pandas==2.1.4
 pyarrow==19.0.1
 pyspark==3.5.5
 python-dotenv==1.0.1
