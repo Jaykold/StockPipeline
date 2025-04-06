@@ -1,17 +1,11 @@
 import os
-import sys
 from pyspark.sql import SparkSession
-from pyspark.conf import SparkConf
 from pyspark.sql.functions import col, round, sha2, concat_ws
 from pyspark.sql.types import StructType, StructField, StringType, DoubleType, LongType, TimestampType
 
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from utils import ACC_NAME, CONTAINER_NAME, ACC_KEY
-
-# ACC_NAME = os.getenv("ACC_NAME")
-# ACC_KEY = os.getenv("ACC_KEY")
-# CONTAINER_NAME = os.getenv("CONTAINER_NAME")
+ACC_NAME = os.getenv("ACC_NAME")
+CONTAINER_NAME = os.getenv("CONTAINER_NAME")
 
 schema = StructType([
     StructField("Datetime", TimestampType(), False),
@@ -26,14 +20,21 @@ schema = StructType([
     StructField("name", StringType(), True)
 ])
 
-conf = SparkConf() \
-    .setAppName('StockDataTransformation') \
-    .setMaster("local[*]") \
-    .set("spark.hadoop.fs.azure.account.key.{}.dfs.core.windows.net".format(ACC_NAME), ACC_KEY) \
-    .set("spark.hadoop.fs.azurebfs.logging.enabled", "true") \
-    .set("spark.hadoop.fs.azurebfs.logging.level", "ERROR")
+# conf = SparkConf() \
+#     .setAppName('StockDataTransformation') \
+#     .setMaster("local[*]") \
+#     .set("spark.jars.packages", "org.apache.hadoop:hadoop-azure:3.3.4,com.microsoft.sqlserver:mssql-jdbc:12.10.0.jre11") \
+#     .set("fs.azure.account.auth.type.{}.dfs.core.windows.net".format(ACC_NAME), "OAuth") \
+#     .set("fs.azure.account.oauth.provider.type.{}.dfs.core.windows.net".format(ACC_NAME), "org.apache.hadoop.fs.azurebfs.oauth2.ClientCredsTokenProvider") \
+#     .set("fs.azure.account.oauth2.client.id.{}.dfs.core.windows.net".format(ACC_NAME), SP_APP_ID) \
+#     .set("fs.azure.account.oauth2.client.secret.{}.dfs.core.windows.net".format(ACC_NAME), SP_SECRET_ID) \
+#     .set("fs.azure.account.oauth2.client.endpoint.{}.dfs.core.windows.net".format(ACC_NAME), "https://login.microsoftonline.com/{}/oauth2/token".format(SP_TENANT_ID)) \
+#     .set("fs.azurebfs.logging.enabled", "true") \
+#     .set("fs.azurebfs.logging.level", "ERROR")
 
-spark = SparkSession.builder.config(conf=conf).getOrCreate()
+spark = SparkSession.builder \
+    .appName("Azure Data Lake Storage") \
+    .getOrCreate() 
 
 file_path = f"abfss://{CONTAINER_NAME}@{ACC_NAME}.dfs.core.windows.net/raw/company_data/*.csv"
 
