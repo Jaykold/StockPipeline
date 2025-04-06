@@ -2,6 +2,7 @@ from airflow.providers.apache.spark.operators.spark_submit import SparkSubmitOpe
 from airflow.decorators import dag, task
 from airflow.hooks.base import BaseHook
 from airflow.operators.email import EmailOperator
+from airflow.providers.microsoft.mssql.operators.mssql import MsSqlOperator
 from datetime import datetime, timedelta
 from pendulum import timezone
 
@@ -33,7 +34,7 @@ tenant_id = conn_2.extra_dejson.get('SP_TENANT_ID')
     description="Run a Spark job using Airflow",
     tags=["MuadDib"]\
 )
-
+#com.microsoft.azure:azure-storage:8.6.6
 def spark_job_dag():
     '''Run a Spark job using Airflow'''
     python_job = SparkSubmitOperator(
@@ -41,7 +42,7 @@ def spark_job_dag():
         application="dags/scripts/spark_job.py",
         conn_id="spark-conn",
         verbose=True,
-        packages="org.apache.hadoop:hadoop-azure:3.3.4,com.microsoft.sqlserver:mssql-jdbc:12.10.0.jre11,com.microsoft.azure:azure-storage:8.6.6",
+        packages="org.apache.hadoop:hadoop-azure:3.3.4,com.microsoft.sqlserver:mssql-jdbc:12.10.0.jre11",
         conf={
             # Azure Data Lake Storage Gen2 authentication (Service Princial)
             f"spark.hadoop.fs.azure.account.auth.type.{acc_name}.dfs.core.windows.net": "OAuth",
@@ -56,6 +57,14 @@ def spark_job_dag():
         }
     )
 
+    # SQL Server connection
+    create_table = MsSqlOperator(
+        task_id="create_table",
+        mssql_conn_id="azure_sql_conn",
+        sql="sql/create_table.sql",
+        autocommit=True,
+    )
+
     send_email_task = EmailOperator(
     task_id='send_email',
     to='jaykold@outlook.com',
@@ -63,6 +72,6 @@ def spark_job_dag():
     html_content='<h3>Successfully ran the Spark Job </h3>'
     )
 
-    python_job >> send_email_task
+    python_job >> create_table >> send_email_task
 
 spark_job_dag()

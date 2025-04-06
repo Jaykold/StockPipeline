@@ -2,6 +2,7 @@ apache-airflow==2.10.5
 apache-airflow-providers-apache-spark==5.1.1
 apache-airflow-providers-databricks==7.2.2
 apache-airflow-providers-microsoft-azure==12.2.2
+apache-airflow-providers-microsoft-mssql==4.2.1
 azure-identity==1.21.0
 azure-storage-blob==12.25.0
 azure-storage-file-datalake==12.19.0
