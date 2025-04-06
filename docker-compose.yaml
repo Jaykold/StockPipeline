@@ -39,6 +39,7 @@ x-airflow-common:
     - ${AIRFLOW_PROJ_DIR:-.}/elt/logs:/opt/airflow/logs
     - ${AIRFLOW_PROJ_DIR:-.}/elt/plugins:/opt/airflow/plugins
     - ${AIRFLOW_PROJ_DIR:-.}/data:/opt/data
+
   user: "${AIRFLOW_UID:-50000}:0"
   depends_on:
     &airflow-common-depends-on

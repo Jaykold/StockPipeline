@@ -4,7 +4,7 @@ from airflow.operators.email import EmailOperator
 from datetime import datetime, timedelta
 import asyncio
 import pandas as pd
-from pytz import timezone
+from pendulum import timezone
 
 from scripts import fetch_all_stocks, auth_datalake, upload_file_to_datalake
 

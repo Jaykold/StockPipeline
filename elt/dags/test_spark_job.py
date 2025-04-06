@@ -3,7 +3,6 @@ from airflow.decorators import dag, task
 from airflow.hooks.base import BaseHook
 from airflow.operators.email import EmailOperator
 from datetime import datetime, timedelta
-import json
 from pendulum import timezone
 
 dag_timezone = timezone("America/New_York")
@@ -44,7 +43,7 @@ def spark_job_dag():
         verbose=True,
         packages="org.apache.hadoop:hadoop-azure:3.3.4,com.microsoft.sqlserver:mssql-jdbc:12.10.0.jre11,com.microsoft.azure:azure-storage:8.6.6",
         conf={
-            # Azure Data Lake Storage Gen2 authentication
+            # Azure Data Lake Storage Gen2 authentication (Service Princial)
             f"spark.hadoop.fs.azure.account.auth.type.{acc_name}.dfs.core.windows.net": "OAuth",
             f"spark.hadoop.fs.azure.account.oauth.provider.type.{acc_name}.dfs.core.windows.net": "org.apache.hadoop.fs.azurebfs.oauth2.ClientCredsTokenProvider",
             f"spark.hadoop.fs.azure.account.oauth2.client.id.{acc_name}.dfs.core.windows.net": app_id,
