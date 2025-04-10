@@ -7,8 +7,8 @@ BEGIN
     CREATE TABLE StockData (
         UniqueID CHAR(64), -- SHA-256 hash of relevant columns
         Datetime DATETIME, -- Date and time of the stock data
-        symbol VARCHAR(10), -- Stock symbol
-        name VARCHAR(255), -- Stock name
+        symbol VARCHAR(10) NOT NULL, -- Stock symbol
+        name VARCHAR(255) NOT NULL, -- Stock name
         [Open] FLOAT, -- Opening price
         [Close] FLOAT, -- Closing price
         High FLOAT, -- Highest price of the day
