@@ -106,6 +106,20 @@ def elt_dag():
         autocommit=True,
     )
 
+    create_staging_table = SQLExecuteQueryOperator(
+        task_id="create_staging_table",
+        conn_id="azure_sql_conn",
+        sql="create_staging_table.sql",
+        autocommit=True,
+    )
+
+    upsert_job = SQLExecuteQueryOperator(
+        task_id="uspert_stock_data",
+        conn_id="azure_sql_conn",
+        sql="upsert_stock_data.sql",
+        autocommit=True,
+    )
+
     send_email_task = EmailOperator(
     task_id='send_email',
     to='jaykold@outlook.com',
@@ -116,6 +130,7 @@ def elt_dag():
     dataframes = extract()
     load_task = load(dataframes)
 
-    load_task >> create_partition >> create_partition_scheme >> create_table >> spark_job >> send_email_task
+    load_task >> create_partition >> create_partition_scheme >> create_table \
+        >> create_staging_table >> spark_job >> upsert_job >> send_email_task
 
 elt_dag()

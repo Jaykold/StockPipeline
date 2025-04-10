@@ -57,6 +57,19 @@ try:
 
     transformed_df.show(15)
 
+    # Load to SQL Server
+    transformed_df.write \
+        .format("jdbc") \
+        .option("url", f"jdbc:sqlserver://{SQL_SERVER}:1433;database={SQL_DB}") \
+        .option("dbtable", "StockData_Staging") \
+        .option("user", SQL_USER) \
+        .option("password", SQL_PASSWORD) \
+        .option("driver", "com.microsoft.sqlserver.jdbc.SQLServerDriver") \
+        .mode("overwrite") \
+        .save()
+
+    print("Data transformed and loaded into SQL Server successfully.")
+
 except Exception as e:
     print(f"Error occured: {e}")
 
