@@ -21,10 +21,17 @@ ACC_NAME = conn.host
 ACC_KEY = conn.password
 CONTAINER_NAME = conn.extra_dejson.get('container_name')
 
-conn_2 = BaseHook.get_connection('service_principal_connection') 
-APP_ID = conn_2.extra_dejson.get('SP_APP_ID')
-SECRET_ID = conn_2.extra_dejson.get('SP_SECRET_ID')
-TENANT_ID = conn_2.extra_dejson.get('SP_TENANT_ID')
+sp_conn = BaseHook.get_connection('service_principal_connection') 
+APP_ID = sp_conn.extra_dejson.get('SP_APP_ID')
+SECRET_ID = sp_conn.extra_dejson.get('SP_SECRET_ID')
+TENANT_ID = sp_conn.extra_dejson.get('SP_TENANT_ID')
+
+# Fetch SQL Server credentials from Airflow connection
+sql_conn = BaseHook.get_connection("azure_sql_conn")
+SQL_SERVER = sql_conn.host
+SQL_DB = sql_conn.schema
+SQL_USER = sql_conn.login
+SQL_PASSWORD = sql_conn.password
 
 # Set timezone to Eastern Time to match the stock market hours
 # Note: This is important for scheduling the DAG
@@ -48,6 +55,7 @@ default_args = {
     description=("Extract stock data from Yahoo Finance,"
     "load to Azure DataLake, Transform with PySpark and push to Azure SQL Server"),
     catchup=False,
+    template_searchpath=["/opt/airflow/sql"],
     tags=["MuadDib"]
 )
 
@@ -67,7 +75,7 @@ def elt_dag():
 
     spark_job = SparkSubmitOperator(
         task_id="spark_job",
-        application="dags/scripts/spark_job.py",
+        application="/opt/airflow/scripts/spark_job.py",
         conn_id="spark-conn",
         verbose=True,
         packages="org.apache.hadoop:hadoop-azure:3.3.4,com.microsoft.sqlserver:mssql-jdbc:12.10.0.jre11,com.microsoft.azure:azure-storage:8.6.6",
@@ -82,6 +90,10 @@ def elt_dag():
         env_vars={
             "ACC_NAME": ACC_NAME,
             "CONTAINER_NAME": CONTAINER_NAME,
+            "SQL_SERVER": SQL_SERVER,
+            "SQL_DB": SQL_DB,
+            "SQL_USER": SQL_USER,
+            "SQL_PASSWORD": SQL_PASSWORD
         }
     )
 

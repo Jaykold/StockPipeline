@@ -14,7 +14,7 @@ BEGIN
         High FLOAT, -- Highest price of the day
         Low FLOAT, -- Lowest price of the day
         Volume BIGINT, -- Trading volume
-        CONSTRAINT PK_StockData PRIMARY KEY (Datetime, UniqueID) -- Primary key on UniqueID
+        CONSTRAINT PK_StockData_Staging PRIMARY KEY (Datetime, UniqueID) -- Primary key on UniqueID
     ) ON ps_StockDataByDate(Datetime); -- Partitioning on the Datetime column
 END
 ELSE

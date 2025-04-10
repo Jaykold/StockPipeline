@@ -2,10 +2,17 @@ import os
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import col, round, sha2, concat_ws
 from pyspark.sql.types import StructType, StructField, StringType, DoubleType, LongType, TimestampType
+from datetime import datetime
 
 
 ACC_NAME = os.getenv("ACC_NAME")
 CONTAINER_NAME = os.getenv("CONTAINER_NAME")
+SQL_SERVER = os.getenv("SQL_SERVER")
+SQL_DB = os.getenv("SQL_DB")
+SQL_USER = os.getenv("SQL_USER")
+SQL_PASSWORD = os.getenv("SQL_PASSWORD")
+
+current_date = datetime.now().strftime("%Y-%m-%d")
 
 schema = StructType([
     StructField("Datetime", TimestampType(), False),
@@ -24,14 +31,14 @@ spark = SparkSession.builder \
     .appName("Azure Data Lake Storage") \
     .getOrCreate() 
 
-file_path = f"abfss://{CONTAINER_NAME}@{ACC_NAME}.dfs.core.windows.net/raw/company_data/*.csv"
+file_path = f"abfss://{CONTAINER_NAME}@{ACC_NAME}.dfs.core.windows.net/raw/company_data/{current_date}.csv"
 
 try:
     df = spark.read.csv(file_path, header=True, schema=schema)
     df.printSchema()
     
     df = df.withColumn(
-            "unique_id",
+            "UniqueID",
             sha2(
                 concat_ws(
                     "",
@@ -44,7 +51,7 @@ try:
         )
     
     transformed_df = df.select(
-        col("unique_id"),
+        col("UniqueID"),
         col("Datetime"),
         col("symbol"),
         col("name"),
