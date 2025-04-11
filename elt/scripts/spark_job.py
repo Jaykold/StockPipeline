@@ -12,7 +12,7 @@ SQL_DB = os.getenv("SQL_DB")
 SQL_USER = os.getenv("SQL_USER")
 SQL_PASSWORD = os.getenv("SQL_PASSWORD")
 
-current_date = datetime.now().strftime("%Y-%m-%d")
+today_date = datetime.now().strftime("%Y%m%d")
 
 schema = StructType([
     StructField("Datetime", TimestampType(), False),
@@ -31,7 +31,7 @@ spark = SparkSession.builder \
     .appName("Azure Data Lake Storage") \
     .getOrCreate() 
 
-file_path = f"abfss://{CONTAINER_NAME}@{ACC_NAME}.dfs.core.windows.net/raw/company_data/{current_date}.csv"
+file_path = f"abfss://{CONTAINER_NAME}@{ACC_NAME}.dfs.core.windows.net/raw/company_data/*_{today_date}.csv"
 
 try:
     df = spark.read.csv(file_path, header=True, schema=schema)

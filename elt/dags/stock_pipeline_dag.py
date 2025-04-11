@@ -16,12 +16,12 @@ from scripts import fetch_all_stocks, auth_datalake, upload_file_to_datalake
 
 
 # Retrieve connection strings
-conn = BaseHook.get_connection('az_datalake_connection')
+conn = BaseHook.get_connection('az_datalake_conn')
 ACC_NAME = conn.host
 ACC_KEY = conn.password
 CONTAINER_NAME = conn.extra_dejson.get('container_name')
 
-sp_conn = BaseHook.get_connection('service_principal_connection') 
+sp_conn = BaseHook.get_connection('service_principal_conn') 
 APP_ID = sp_conn.extra_dejson.get('SP_APP_ID')
 SECRET_ID = sp_conn.extra_dejson.get('SP_SECRET_ID')
 TENANT_ID = sp_conn.extra_dejson.get('SP_TENANT_ID')
