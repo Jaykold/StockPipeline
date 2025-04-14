@@ -16,9 +16,11 @@ An end-to-end data engineering project that extracts stock data from Yahoo Finan
 
 This project implements a complete ETL (Extract, Transform, Load) pipeline for stock market data. It extracts hourly stock data for major companies, processes it, and stores it in a structured format for analysis.
 
-## Preprequisite
+## Prerequisite
 - Docker desktop, docker compose
-- Active azure subscription
+- Install Azure CLI (Make sure you have an active azure subscription)
+   - [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/)
+   - [Azure Login](https://learn.microsoft.com/en-us/cli/azure/authenticate-azure-cli-interactively)
 - Terraform installed
  - [Download your OS version here](https://developer.hashicorp.com/terraform/install)
 - Create a terraform.tfvars for sensitive information
