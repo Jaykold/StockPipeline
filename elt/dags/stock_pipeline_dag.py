@@ -21,7 +21,11 @@ ACC_NAME = conn.host
 ACC_KEY = conn.password
 CONTAINER_NAME = conn.extra_dejson.get('container_name')
 
+<<<<<<< HEAD
 sp_conn = BaseHook.get_connection('service_principal_conn') 
+=======
+sp_conn = BaseHook.get_connection('service_principal_connection') 
+>>>>>>> fadbd4a (.)
 APP_ID = sp_conn.extra_dejson.get('SP_APP_ID')
 SECRET_ID = sp_conn.extra_dejson.get('SP_SECRET_ID')
 TENANT_ID = sp_conn.extra_dejson.get('SP_TENANT_ID')
@@ -75,7 +79,11 @@ def elt_dag():
 
     spark_job = SparkSubmitOperator(
         task_id="spark_job",
+<<<<<<< HEAD
         application="/opt/airflow/scripts/spark_job.py",
+=======
+        application="/scripts/spark_job.py",
+>>>>>>> fadbd4a (.)
         conn_id="spark-conn",
         verbose=True,
         packages="org.apache.hadoop:hadoop-azure:3.3.4,com.microsoft.sqlserver:mssql-jdbc:12.10.0.jre11,com.microsoft.azure:azure-storage:8.6.6",
