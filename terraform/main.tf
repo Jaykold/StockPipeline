@@ -1,10 +1,10 @@
 resource "azurerm_resource_group" "lisan-algaib" {
-  name     = "Ichebi"
+  name     = "algaib"
   location = var.resource_group_location
 }
 
 resource "azurerm_storage_account" "adls" {
-  name                     = "arrakis"
+  name                     = "benegesserit"
   resource_group_name      = azurerm_resource_group.lisan-algaib.name
   location                 = azurerm_resource_group.lisan-algaib.location
   account_tier             = "Standard"
@@ -18,27 +18,27 @@ resource "azurerm_storage_container" "blob" {
 }
 
 resource "azurerm_mssql_server" "sql_server" {
-  name                = "arrakis-sql-server"
-  resource_group_name = azurerm_resource_group.lisan-algaib.name
-  location            = azurerm_resource_group.lisan-algaib.location
-  version             = "12.0"
-  administrator_login = var.sql_admin_username
+  name                         = "arrakis-sql-server"
+  resource_group_name          = azurerm_resource_group.lisan-algaib.name
+  location                     = azurerm_resource_group.lisan-algaib.location
+  version                      = "12.0"
+  administrator_login          = var.sql_admin_username
   administrator_login_password = var.sql_admin_password
 }
 
 resource "azurerm_mssql_database" "database" {
-  name = "spice-db"
-  server_id = azurerm_mssql_server.sql_server.id
-  sku_name =  "Basic"
+  name           = "spice-db"
+  server_id      = azurerm_mssql_server.sql_server.id
+  sku_name       = "Basic"
   zone_redundant = false
-  max_size_gb = 2
+  max_size_gb    = 2
 }
 
 resource "azurerm_mssql_firewall_rule" "allow_azure_services" {
-  name = "fremen"
-  server_id = azurerm_mssql_server.sql_server.id
+  name             = "fremen"
+  server_id        = azurerm_mssql_server.sql_server.id
   start_ip_address = var.start_client_ip_address
-  end_ip_address = var.end_client_ip_address
+  end_ip_address   = var.end_client_ip_address
 }
 
 # Create an Azure AD application
@@ -48,7 +48,7 @@ resource "azuread_application" "spice_app" {
 
 # Create a service principal associated with the application
 resource "azuread_service_principal" "spice_sp" {
-  client_id = azuread_application.spice_app.application_id
+  client_id = azuread_application.spice_app.client_id
 }
 
 # Create a password for the service principal
@@ -66,7 +66,7 @@ resource "azurerm_role_assignment" "sp_storage_role" {
 
 # Output the service principal credentials for later use
 output "service_principal_application_id" {
-  value     = azuread_application.spice_app.application_id
+  value     = azuread_application.spice_app.client_id
   sensitive = true
 }
 
