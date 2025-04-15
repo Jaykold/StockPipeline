@@ -18,11 +18,11 @@ default_args = {
 }
 
 # Retrieve connection strings
-conn_1 = BaseHook.get_connection('az_datalake_connection')
+conn_1 = BaseHook.get_connection('az_datalake_conn')
 acc_name = conn_1.host
 container_name = conn_1.extra_dejson.get('container_name')
 
-conn_2 = BaseHook.get_connection('service_principal_connection') 
+conn_2 = BaseHook.get_connection('service_principal_conn') 
 app_id = conn_2.extra_dejson.get('SP_APP_ID')
 secret_id = conn_2.extra_dejson.get('SP_SECRET_ID')
 tenant_id = conn_2.extra_dejson.get('SP_TENANT_ID')
@@ -40,7 +40,7 @@ def spark_job_dag():
     '''Run a Spark job using Airflow'''
     python_job = SparkSubmitOperator(
         task_id="spark_job",
-        application="dags/scripts/spark_job.py",
+        application="/opt/airflow/scripts/spark_job.py",
         conn_id="spark-conn",
         verbose=True,
         packages="org.apache.hadoop:hadoop-azure:3.3.4,com.microsoft.sqlserver:mssql-jdbc:12.10.0.jre11,com.microsoft.azure:azure-storage:8.6.6",

@@ -4,7 +4,7 @@ resource "azurerm_resource_group" "lisan-algaib" {
 }
 
 resource "azurerm_storage_account" "adls" {
-  name                     = "benegesserit"
+  name                     = "benegesserit1"
   resource_group_name      = azurerm_resource_group.lisan-algaib.name
   location                 = azurerm_resource_group.lisan-algaib.location
   account_tier             = "Standard"
@@ -57,20 +57,16 @@ resource "azuread_service_principal_password" "spice_sp_password" {
   end_date             = "2025-06-01T00:00:00Z"
 }
 
+# Create application password for the service principal
+resource "azuread_application_password" "spice_app_password" {
+  display_name   = "spice-harvester-password"
+  application_id = azuread_application.spice_app.id
+  end_date       = "2025-06-01T00:00:00Z"
+}
+
 # Assign Storage Blob Data Contributor role to the service principal for the container
 resource "azurerm_role_assignment" "sp_storage_role" {
   scope                = azurerm_storage_container.blob.resource_manager_id
   role_definition_name = "Storage Blob Data Contributor"
   principal_id         = azuread_service_principal.spice_sp.id
-}
-
-# Output the service principal credentials for later use
-output "service_principal_application_id" {
-  value     = azuread_application.spice_app.client_id
-  sensitive = true
-}
-
-output "service_principal_password" {
-  value     = azuread_service_principal_password.spice_sp_password.value
-  sensitive = true
 }
