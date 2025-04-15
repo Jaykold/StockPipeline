@@ -3,7 +3,7 @@ from pyspark.sql import SparkSession
 from pyspark.sql.functions import col, round, sha2, concat_ws
 from pyspark.sql.types import StructType, StructField, StringType, DoubleType, LongType, TimestampType
 from datetime import datetime
-from pendulum import timezone
+from zoneinfo import ZoneInfo
 
 ACC_NAME = os.getenv("ACC_NAME")
 CONTAINER_NAME = os.getenv("CONTAINER_NAME")
@@ -13,7 +13,7 @@ SQL_USER = os.getenv("SQL_USER")
 SQL_PASSWORD = os.getenv("SQL_PASSWORD")
 
 # Set timezone to Eastern Time to match the stock market hours
-dag_timezone = timezone("America/New_York")
+dag_timezone = ZoneInfo("America/New_York")
 
 today_date = datetime.now(dag_timezone).strftime("%Y%m%d")
 
