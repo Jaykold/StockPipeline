@@ -8,7 +8,7 @@ from airflow.providers.common.sql.operators.sql import SQLExecuteQueryOperator
 from datetime import datetime, timedelta
 import asyncio
 import pandas as pd
-from pendulum import timezone
+from zoneinfo import ZoneInfo
 
 sys.path.append(os.path.dirname(os.path.dirname((os.path.abspath(__file__)))))
                 
@@ -35,7 +35,7 @@ SQL_PASSWORD = sql_conn.password
 
 # Set timezone to Eastern Time to match the stock market hours
 # Note: This is important for scheduling the DAG
-dag_timezone = timezone("America/New_York")
+dag_timezone = ZoneInfo("America/New_York")
 
 # retrieve the tickers from the CSV file
 tickers_df = pd.read_csv("../data/companies.csv")
