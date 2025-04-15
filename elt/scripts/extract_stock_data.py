@@ -4,13 +4,13 @@ import yfinance as yf
 import pandas as pd
 from typing import List
 
-def get_data_file_path(datestamp: str, file_name: str):
-    root_dir = os.path.dirname(os.path.abspath(os.getcwd()))
-    data_dir = os.path.join(root_dir, 'data')
-    os.makedirs(data_dir, exist_ok=True)
-    file_path = os.path.join(data_dir, f"{file_name}_{datestamp}.parquet")
+# def get_data_file_path(datestamp: str, file_name: str):
+#     root_dir = os.path.dirname(os.path.abspath(os.getcwd()))
+#     data_dir = os.path.join(root_dir, 'data')
+#     os.makedirs(data_dir, exist_ok=True)
+#     file_path = os.path.join(data_dir, f"{file_name}_{datestamp}.parquet")
 
-    return file_path
+#     return file_path
 
 async def fetch_stock_data(ticker, name) -> pd.DataFrame:
     '''Fetch data for a ticker and returns a DataFrame'''

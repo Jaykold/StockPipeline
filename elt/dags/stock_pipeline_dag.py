@@ -27,7 +27,7 @@ SECRET_ID = sp_conn.extra_dejson.get('SP_SECRET_ID')
 TENANT_ID = sp_conn.extra_dejson.get('SP_TENANT_ID')
 
 # Fetch SQL Server credentials from Airflow connection
-sql_conn = BaseHook.get_connection("azure_sql_conn")
+sql_conn = BaseHook.get_connection("az_sql_conn")
 SQL_SERVER = sql_conn.host
 SQL_DB = sql_conn.schema
 SQL_USER = sql_conn.login
@@ -99,35 +99,35 @@ def elt_dag():
 
     create_partition = SQLExecuteQueryOperator(
         task_id="create_partition",
-        conn_id="azure_sql_conn",
+        conn_id="az_sql_conn",
         sql="create_partition.sql",
         autocommit=True,
     )
 
     create_partition_scheme = SQLExecuteQueryOperator(
         task_id="create_partition_scheme",
-        conn_id="azure_sql_conn",
+        conn_id="az_sql_conn",
         sql="create_partition_scheme.sql",
         autocommit=True,
     )
 
     create_table = SQLExecuteQueryOperator(
         task_id="create_table",
-        conn_id="azure_sql_conn",
+        conn_id="az_sql_conn",
         sql="create_table.sql",
         autocommit=True,
     )
 
     create_staging_table = SQLExecuteQueryOperator(
         task_id="create_staging_table",
-        conn_id="azure_sql_conn",
+        conn_id="az_sql_conn",
         sql="create_staging_table.sql",
         autocommit=True,
     )
 
     upsert_job = SQLExecuteQueryOperator(
         task_id="uspert_stock_data",
-        conn_id="azure_sql_conn",
+        conn_id="az_sql_conn",
         sql="upsert_stock_data.sql",
         autocommit=True,
     )

@@ -2,6 +2,7 @@ from azure.storage.filedatalake import DataLakeServiceClient
 from typing import List
 import pandas as pd
 from datetime import datetime
+from pendulum import timezone
 
 def auth_datalake(acc_name: str, acc_key: str):
     '''Initialize Service Client'''
@@ -24,7 +25,11 @@ def upload_file_to_datalake(
         container_name: str
         ):
     '''Gets the service client and loads raw data into Azure Datalake'''
-    current_time = datetime.now().strftime("%Y%m%d")
+
+    # Using Airflow's timezone
+    dag_timezone = timezone("America/New_York")
+    # Get the current date in YYYYMMDD format
+    current_time = datetime.now(dag_timezone).strftime("%Y%m%d")
     
     # Get container
     file_system_client = service_client.get_file_system_client(container_name)

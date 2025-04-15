@@ -3,7 +3,7 @@ from pyspark.sql import SparkSession
 from pyspark.sql.functions import col, round, sha2, concat_ws
 from pyspark.sql.types import StructType, StructField, StringType, DoubleType, LongType, TimestampType
 from datetime import datetime
-
+from pendulum import timezone
 
 ACC_NAME = os.getenv("ACC_NAME")
 CONTAINER_NAME = os.getenv("CONTAINER_NAME")
@@ -12,7 +12,10 @@ SQL_DB = os.getenv("SQL_DB")
 SQL_USER = os.getenv("SQL_USER")
 SQL_PASSWORD = os.getenv("SQL_PASSWORD")
 
-today_date = datetime.now().strftime("%Y%m%d")
+# Set timezone to Eastern Time to match the stock market hours
+dag_timezone = timezone("America/New_York")
+
+today_date = datetime.now(dag_timezone).strftime("%Y%m%d")
 
 schema = StructType([
     StructField("Datetime", TimestampType(), False),
