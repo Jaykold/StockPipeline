@@ -12,7 +12,7 @@ An end-to-end data engineering project that extracts stock data from Yahoo Finan
 
 ## Overview
 
-This project implements a complete ETL (Extract, Transform, Load) pipeline for stock market data. It extracts hourly stock data for major companies, processes it, and stores it in a structured format for analysis.
+This project implements a complete ETL (Extract, Transform, Load) pipeline for stock market data. It extracts hourly stock data for major companies, processes it, and stores it in a structured format for analysis. This project assumes you are on Linux or MacOS. 
 
 ### Prerequisite
 
@@ -28,9 +28,6 @@ This project implements a complete ETL (Extract, Transform, Load) pipeline for s
       ** Linux \
       `sudo apt update` \
       `sudo apt install make`
-   
-   - Windows
-      - Follow the steps in this [post](https://medium.com/@AliMasaoodi/installing-make-on-windows-10-using-chocolatey-a-step-by-step-guide-5e178c449394) and install it
 
 - Install Azure CLI (Make sure you have an active azure subscription)
    - [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/)

@@ -1,4 +1,9 @@
 SHELL := /bin/bash
+
+# Set Airflow UID and GID once
+AIRFLOW_UID := $(shell id -u)
+AIRFLOW_GID := $(shell id -g)
+
 .PHONY: tf-apply tf-output docker-build docker-start docker-stop git tf-destroy
 
 tf-apply:
@@ -9,6 +14,7 @@ tf-apply:
 	terraform plan -out=tfplan && \
 	echo "Terraform plan executed successfully" && \
 	terraform apply tfplan && \
+	rm -f tfplan && \
 	echo "Terraform apply executed successfully"
 
 tf-output:
@@ -21,24 +27,20 @@ docker-build:
 	docker build -t custom_airflow:latest . && \
 	echo "Docker image built successfully"
 
+airflow-init:
+	@echo "Initializing Airflow..."
+	docker-compose up airflow-init
+	@echo "Airflow initialized successfully"
+
 docker-start:
-	@echo -e "AIRFLOW_UID=$$(id -u)\nAIRFLOW_GID=$$(id -g)" >> .env
+	@grep -q "^AIRFLOW_UID=" .env || echo "AIRFLOW_UID=$(AIRFLOW_UID)" >> .env
+	@grep -q "^AIRFLOW_GID=" .env || echo "AIRFLOW_GID=$(AIRFLOW_GID)" >> .env
 	@echo "Running Docker containers now..."
-	docker-compose up -d
+	#docker-compose up -d
 	
 docker-stop:
 	@echo "Stopping Docker container..."
 	docker-compose down
-
-git:
-	git status
-	@echo "Enter files to add ('-u' for tracked modified files, '.' for all changes):"
-	@read files && git add $$files
-	@echo "Enter commit message:"
-	@read msg && git commit -m "$$msg"
-	@echo "Pushing changes to remote..."
-	git push
-	@echo "Git operations completed successfully"
 
 tf-destroy:
 	@echo "Are you sure you want to destroy the Terraform infrastructure? (yes/no)"
@@ -50,4 +52,3 @@ tf-destroy:
 	@echo "Destroying Terraform infrastructure..."
 	cd terraform && \
 	terraform destroy
-	
