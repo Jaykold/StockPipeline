@@ -47,7 +47,7 @@ resource_group_location = <YOUR_LOCATION> # "East US", "UK West", "North Europe"
 
 ## Architecture
 
-![Architecture Diagram](https://via.placeholder.com/800x400?text=Stock+Data+Pipeline+Architecture)
+<img src="data/flowchart.png" alt="Architecture Diagram" width="600">
 
 The pipeline follows this workflow:
 
